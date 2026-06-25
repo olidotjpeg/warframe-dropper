@@ -84,6 +84,6 @@ This means the React app only needs one rendering path — no special cases.
 
 ## Definition of Done
 
-- [ ] File exists at `packages/types/src/index.ts`
-- [ ] `cd packages/types && npx tsc --noEmit --strict src/index.ts` exits with no errors
-- [ ] All 6 interfaces are exported (check with `grep "^export interface" packages/types/src/index.ts`)
+- [x] File exists at `packages/types/src/index.ts`
+- [x] `cd packages/types && npx tsc --noEmit --strict src/index.ts` exits with no errors
+- [x] All 6 interfaces are exported (check with `grep "^export interface" packages/types/src/index.ts`)
