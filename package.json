@@ -1,0 +1,17 @@
+{
+  "name": "warframe-dropper",
+  "private": true,
+  "workspaces": [
+    "packages/types",
+    "packages/parser",
+    "packages/web"
+  ],
+  "scripts": {
+    "parse": "tsx packages/parser/src/index.ts",
+    "dev": "npm run dev --workspace=packages/web"
+  },
+  "devDependencies": {
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
