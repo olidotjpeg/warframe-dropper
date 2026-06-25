@@ -1,0 +1,9 @@
+{
+  "name": "@warframe-dropper/parser",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@warframe-dropper/types": "*",
+    "cheerio": "^1.0.0"
+  }
+}
