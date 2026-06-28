@@ -2,6 +2,7 @@
   "name": "@warframe-dropper/parser",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@warframe-dropper/types": "*",
     "cheerio": "^1.0.0"

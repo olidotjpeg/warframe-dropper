@@ -1,0 +1,194 @@
+/* ── Variables ─────────────────────────────────────────────── */
+:root {
+  --bg:       #0d0d14;
+  --surface:  #16161f;
+  --border:   #2a2a3a;
+  --text:     #d8d8e8;
+  --muted:    #666688;
+  --accent:   #5b7cf6;
+
+  --common:     #888899;
+  --uncommon:   #4caf50;
+  --rare:       #ffc107;
+  --ultra-rare: #f44336;
+  --legendary:  #c084fc;
+}
+
+/* ── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── Loading / error screens ────────────────────────────────── */
+.status-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+.status-screen.error { color: var(--ultra-rare); }
+
+/* ── Header ─────────────────────────────────────────────────── */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1.5rem;
+}
+
+header h1 {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--accent);
+}
+
+.last-update {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── Tab nav ────────────────────────────────────────────────── */
+nav { display: flex; gap: 0.25rem; }
+
+nav button {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--muted);
+  padding: 0.3rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+nav button:hover { color: var(--text); }
+
+nav button[aria-current] {
+  color: var(--text);
+  border-color: var(--border);
+  background: var(--bg);
+}
+
+.badge {
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 99px;
+  padding: 0 0.4rem;
+  line-height: 1.4;
+}
+
+/* ── Main content ───────────────────────────────────────────── */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* ── Search input ───────────────────────────────────────────── */
+input[type='search'] {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  padding: 0.55rem 1rem;
+  font-size: 0.95rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  outline: none;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.15s;
+}
+input[type='search']:focus { border-color: var(--accent); }
+
+/* ── Empty / not-found states ───────────────────────────────── */
+.empty-state, .not-found {
+  color: var(--muted);
+  font-style: italic;
+  padding: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+/* ── Result groups ──────────────────────────────────────────── */
+.result-group {
+  margin-bottom: 1.75rem;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.result-header strong { font-size: 0.95rem; }
+
+.result-header button {
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: border-color 0.15s, opacity 0.15s;
+}
+.result-header button:hover { border-color: var(--accent); }
+.result-header button:disabled { opacity: 0.35; cursor: default; }
+
+/* ── Drop table ─────────────────────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+td {
+  padding: 0.22rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  color: var(--muted);
+}
+
+td.col-group { color: var(--text); max-width: 340px; }
+td.col-chance { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+td.col-rot, td.col-stage { white-space: nowrap; }
+td.col-section { white-space: nowrap; }
+
+/* ── Rarity colours ─────────────────────────────────────────── */
+.rarity-common     { color: var(--common); }
+.rarity-uncommon   { color: var(--uncommon); }
+.rarity-rare       { color: var(--rare); font-weight: 600; }
+.rarity-ultra-rare { color: var(--ultra-rare); font-weight: 700; }
+.rarity-legendary  { color: var(--legendary); font-weight: 700; }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  header { gap: 0.75rem; padding: 0.6rem 1rem; flex-wrap: wrap; }
+  .last-update { display: none; }
+  main { padding: 1rem; }
+  td { padding: 0.2rem 0.35rem; }
+}
