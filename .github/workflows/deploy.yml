@@ -28,6 +28,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Parse drop tables
+        run: npm run parse
+
       - name: Build
         run: npm run build --workspace=packages/web
 
