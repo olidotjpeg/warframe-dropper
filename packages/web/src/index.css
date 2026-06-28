@@ -159,25 +159,6 @@ input[type='search']:focus { border-color: var(--accent); }
 .result-header button:hover { border-color: var(--accent); }
 .result-header button:disabled { opacity: 0.35; cursor: default; }
 
-/* ── Drop table ─────────────────────────────────────────────── */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
-}
-
-td {
-  padding: 0.22rem 0.6rem;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-  color: var(--muted);
-}
-
-td.col-group { color: var(--text); max-width: 340px; }
-td.col-chance { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
-td.col-rot, td.col-stage { white-space: nowrap; }
-td.col-section { white-space: nowrap; }
-
 /* ── Rarity colours ─────────────────────────────────────────── */
 .rarity-common     { color: var(--common); }
 .rarity-uncommon   { color: var(--uncommon); }
@@ -185,10 +166,73 @@ td.col-section { white-space: nowrap; }
 .rarity-ultra-rare { color: var(--ultra-rare); font-weight: 700; }
 .rarity-legendary  { color: var(--legendary); font-weight: 700; }
 
+/* ── SourceList ──────────────────────────────────────────────── */
+.source-list { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.source-section {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.source-section-summary {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  background: var(--surface);
+  cursor: pointer; user-select: none; list-style: none;
+  font-size: 0.8rem;
+}
+.source-section-summary::-webkit-details-marker { display: none; }
+
+.source-section-chevron { display: inline-block; width: 0.5rem; flex-shrink: 0; }
+.source-section-chevron::before { content: '▶'; display: inline-block; transition: transform 0.15s; }
+details[open] .source-section-chevron::before { transform: rotate(90deg); }
+
+.source-section-name { color: var(--text); font-weight: 600; flex: 1; }
+.source-section-count {
+  flex-shrink: 0; background: var(--bg); border: 1px solid var(--border);
+  color: var(--muted); font-size: 0.7rem; font-weight: 700;
+  border-radius: 99px; padding: 0 0.4rem; line-height: 1.5;
+}
+
+.source-rows { padding: 0.25rem 0.5rem 0.4rem; }
+
+.source-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem;
+  padding: 0.25rem 0.15rem;
+  border-bottom: 1px solid var(--border);
+}
+.source-row:last-of-type { border-bottom: none; }
+
+.source-group {
+  flex: 1 1 auto; min-width: 0;
+  color: var(--text); font-size: 0.85rem;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.source-pill {
+  flex-shrink: 0; padding: 0.1rem 0.45rem; border-radius: 99px;
+  background: var(--bg); border: 1px solid var(--border);
+  font-size: 0.75rem; white-space: nowrap; color: var(--muted);
+}
+
+.source-rarity { border-color: transparent; background: transparent; }
+
+.source-chance { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--text); }
+
+.source-show-more {
+  display: block; width: 100%; margin-top: 0.3rem; padding: 0.25rem;
+  background: none; border: 1px dashed var(--border); border-radius: 4px;
+  color: var(--muted); font-size: 0.78rem; cursor: pointer; text-align: center;
+  transition: border-color 0.15s, color 0.15s;
+}
+.source-show-more:hover { border-color: var(--accent); color: var(--text); }
+
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
   header { gap: 0.75rem; padding: 0.6rem 1rem; flex-wrap: wrap; }
   .last-update { display: none; }
   main { padding: 1rem; }
-  td { padding: 0.2rem 0.35rem; }
+  .source-group { font-size: 0.8rem; }
+  .source-pill  { font-size: 0.7rem; padding: 0.08rem 0.35rem; }
 }

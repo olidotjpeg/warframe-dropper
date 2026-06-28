@@ -1,5 +1,6 @@
 import type { DropTable } from '@warframe-dropper/types'
 import { searchDrops } from '../utils/search'
+import { SourceList } from './SourceList'
 
 interface Props {
   data: DropTable
@@ -34,22 +35,7 @@ export function TrackedTab({ data, tracked, onUntrack }: Props) {
                 Not found in current drop table — run <code>npm run parse</code> to refresh.
               </p>
             ) : (
-              <table>
-                <tbody>
-                  {exact.sources.map((src, i) => (
-                    <tr key={i}>
-                      <td className="col-section">{src.sectionName}</td>
-                      <td className="col-group">{src.groupName}</td>
-                      {src.rotationName && <td className="col-rot">Rot {src.rotationName}</td>}
-                      {src.stageName && <td className="col-stage">{src.stageName}</td>}
-                      <td className={`col-rarity rarity-${src.rarity.toLowerCase().replace(/\s+/g, '-')}`}>
-                        {src.rarity}
-                      </td>
-                      <td className="col-chance">{src.chance.toFixed(2)}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <SourceList sources={exact.sources} />
             )}
           </div>
         )

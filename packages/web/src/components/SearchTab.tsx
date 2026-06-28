@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import type { DropTable } from '@warframe-dropper/types'
 import { searchDrops, type SearchResult } from '../utils/search'
+import { SourceList } from './SourceList'
 
 interface Props {
   data: DropTable
@@ -43,22 +44,7 @@ export function SearchTab({ data, tracked, onTrack }: Props) {
               {tracked.includes(item) ? 'Tracked' : 'Track'}
             </button>
           </div>
-          <table>
-            <tbody>
-              {sources.map((src, i) => (
-                <tr key={i}>
-                  <td className="col-section">{src.sectionName}</td>
-                  <td className="col-group">{src.groupName}</td>
-                  {src.rotationName && <td className="col-rot">Rot {src.rotationName}</td>}
-                  {src.stageName && <td className="col-stage">{src.stageName}</td>}
-                  <td className={`col-rarity rarity-${src.rarity.toLowerCase().replace(/\s+/g, '-')}`}>
-                    {src.rarity}
-                  </td>
-                  <td className="col-chance">{src.chance.toFixed(2)}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <SourceList sources={sources} />
         </div>
       ))}
     </div>

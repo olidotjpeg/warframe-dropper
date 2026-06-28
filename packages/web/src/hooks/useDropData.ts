@@ -11,7 +11,7 @@ export function useDropData(): State {
   const [state, setState] = useState<State>({ data: null, loading: true, error: null })
 
   useEffect(() => {
-    fetch('/data/latest.json')
+    fetch(`${import.meta.env.BASE_URL}data/latest.json`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status} — run npm run parse first`)
         return res.json() as Promise<DropTable>
