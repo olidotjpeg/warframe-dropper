@@ -166,6 +166,12 @@ input[type='search']:focus { border-color: var(--accent); }
 .rarity-ultra-rare { color: var(--ultra-rare); font-weight: 700; }
 .rarity-legendary  { color: var(--legendary); font-weight: 700; }
 
+/* ── Refinement tier colours ────────────────────────────────── */
+.refinement-intact      { color: #888899; border-color: #888899; }
+.refinement-exceptional { color: #c87533; border-color: #c87533; }
+.refinement-flawless    { color: #b0b8c8; border-color: #b0b8c8; }
+.refinement-radiant     { color: var(--rare); border-color: var(--rare); }
+
 /* ── SourceList ──────────────────────────────────────────────── */
 .source-list { display: flex; flex-direction: column; gap: 0.4rem; }
 

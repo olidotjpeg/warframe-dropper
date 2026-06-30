@@ -3,8 +3,31 @@ import type { DropSource } from '../utils/search'
 
 const TRUNCATE_AT = 5
 
+const REFINEMENTS = ['Intact', 'Exceptional', 'Flawless', 'Radiant'] as const
+type Refinement = typeof REFINEMENTS[number]
+
 function raritySlug(rarity: string) {
   return rarity.toLowerCase().replace(/\s+/g, '-')
+}
+
+function parseRelicGroup(name: string): { base: string; refinement: Refinement } | null {
+  const m = name.match(/^(.+?)\s*\((Intact|Exceptional|Flawless|Radiant)\)$/)
+  return m ? { base: m[1], refinement: m[2] as Refinement } : null
+}
+
+function groupRelics(
+  sources: DropSource[],
+): Map<string, Partial<Record<Refinement, DropSource>>> | null {
+  const entries = sources.map(s => ({ s, r: parseRelicGroup(s.groupName) }))
+  if (!entries.some(e => e.r)) return null
+  const map = new Map<string, Partial<Record<Refinement, DropSource>>>()
+  for (const { s, r } of entries) {
+    if (!r) continue
+    const row = map.get(r.base) ?? {}
+    row[r.refinement] = s
+    map.set(r.base, row)
+  }
+  return map
 }
 
 function groupBySection(sources: DropSource[]): Map<string, DropSource[]> {
@@ -19,10 +42,58 @@ function groupBySection(sources: DropSource[]): Map<string, DropSource[]> {
 
 function SectionBlock({ name, sources }: { name: string; sources: DropSource[] }) {
   const [showAll, setShowAll] = useState(false)
-  const sorted = useMemo(() => [...sources].sort((a, b) => b.chance - a.chance), [sources])
-  const visible = showAll ? sorted : sorted.slice(0, TRUNCATE_AT)
-  const hiddenCount = sorted.length - TRUNCATE_AT
+  const relicGroups = useMemo(() => groupRelics(sources), [sources])
+  const sortedFlat = useMemo(() => [...sources].sort((a, b) => b.chance - a.chance), [sources])
+  const sortedRelics = useMemo(() => {
+    if (!relicGroups) return null
+    return Array.from(relicGroups.entries()).sort(([, a], [, b]) => {
+      const best = (m: Partial<Record<Refinement, DropSource>>) =>
+        Math.max(...REFINEMENTS.map(r => m[r]?.chance ?? 0))
+      return best(b) - best(a)
+    })
+  }, [relicGroups])
 
+  if (relicGroups && sortedRelics) {
+    const visible = showAll ? sortedRelics : sortedRelics.slice(0, TRUNCATE_AT)
+    const hiddenCount = sortedRelics.length - TRUNCATE_AT
+    return (
+      <details className="source-section" open>
+        <summary className="source-section-summary">
+          <span className="source-section-chevron" aria-hidden="true" />
+          <span className="source-section-name">{name}</span>
+          <span className="source-section-count">{sortedRelics.length}</span>
+        </summary>
+        <div className="source-rows">
+          {visible.map(([base, byRef]) => (
+            <div key={base} className="source-row">
+              <span className="source-group">{base}</span>
+              {REFINEMENTS.map(ref => {
+                const src = byRef[ref]
+                if (!src) return null
+                return (
+                  <span
+                    key={ref}
+                    className={`source-pill refinement-${ref.toLowerCase()}`}
+                    title={`${ref}: ${src.rarity} ${src.chance.toFixed(2)}%`}
+                  >
+                    {ref[0]} {src.chance.toFixed(2)}%
+                  </span>
+                )
+              })}
+            </div>
+          ))}
+          {!showAll && hiddenCount > 0 && (
+            <button className="source-show-more" onClick={() => setShowAll(true)}>
+              Show {hiddenCount} more…
+            </button>
+          )}
+        </div>
+      </details>
+    )
+  }
+
+  const visible = showAll ? sortedFlat : sortedFlat.slice(0, TRUNCATE_AT)
+  const hiddenCount = sortedFlat.length - TRUNCATE_AT
   return (
     <details className="source-section" open>
       <summary className="source-section-summary">
