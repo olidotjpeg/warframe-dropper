@@ -1,5 +1,6 @@
 import type { DropTable } from '@warframe-dropper/types'
 import { searchDrops } from '../utils/search'
+import { RelicOptimizer } from './RelicOptimizer'
 import { SourceList } from './SourceList'
 
 interface Props {
@@ -19,6 +20,12 @@ export function TrackedTab({ data, tracked, onUntrack }: Props) {
 
   return (
     <div>
+      {tracked.length >= 2 && (
+        <div className="optimizer-section">
+          <h2>Relic Optimizer</h2>
+          <RelicOptimizer data={data} tracked={tracked} />
+        </div>
+      )}
       {tracked.map((item) => {
         const results = searchDrops(data, item)
         const exact = results.find((r) => r.item === item)

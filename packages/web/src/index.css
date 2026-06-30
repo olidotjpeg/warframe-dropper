@@ -234,6 +234,57 @@ details[open] .source-section-chevron::before { transform: rotate(90deg); }
 }
 .source-show-more:hover { border-color: var(--accent); color: var(--text); }
 
+/* ── RelicOptimizer ─────────────────────────────────────────── */
+.optimizer-section {
+  margin-bottom: 2rem;
+}
+
+.optimizer-section h2 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+
+.optimizer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.optimizer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.optimizer-relic {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--accent);
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.optimizer-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  flex: 1;
+}
+
+.optimizer-total {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
   header { gap: 0.75rem; padding: 0.6rem 1rem; flex-wrap: wrap; }
