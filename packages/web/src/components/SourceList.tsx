@@ -44,13 +44,13 @@ function groupBySection(sources: DropSource[]): Map<string, DropSource[]> {
 function collapseRotations(sources: DropSource[]): CollapsedSource[] {
   const map = new Map<string, CollapsedSource>()
   for (const src of sources) {
-    const key = `${src.groupName}|${src.stageName}|${src.rarity}`
+    const key = `${src.groupName}|${src.stageName}`
     let entry = map.get(key)
     if (!entry) {
-      entry = { groupName: src.groupName, stageName: src.stageName, rarity: src.rarity, rotations: [] }
+      entry = { groupName: src.groupName, stageName: src.stageName, rotations: [] }
       map.set(key, entry)
     }
-    entry.rotations.push({ rotationName: src.rotationName, chance: src.chance })
+    entry.rotations.push({ rotationName: src.rotationName, rarity: src.rarity, chance: src.chance })
   }
   for (const entry of map.values()) {
     entry.rotations.sort((a, b) => a.rotationName.localeCompare(b.rotationName))
@@ -133,14 +133,14 @@ function SectionBlock({ name, sources }: { name: string; sources: DropSource[] }
             <span className="source-group">{entry.groupName}</span>
             {entry.stageName && <span className="source-pill">{entry.stageName}</span>}
             {entry.rotations.map(r => (
-              <span key={r.rotationName} className="source-pill">
+              <span
+                key={r.rotationName}
+                className={`source-pill source-rarity rarity-${raritySlug(r.rarity)}`}
+              >
                 {r.rotationName && `Rot ${r.rotationName} `}
-                {r.chance.toFixed(2)}%
+                {r.rarity} {r.chance.toFixed(2)}%
               </span>
             ))}
-            <span className={`source-pill source-rarity rarity-${raritySlug(entry.rarity)}`}>
-              {entry.rarity}
-            </span>
           </div>
         ))}
         {!showAll && hiddenCount > 0 && (
