@@ -32,3 +32,10 @@ export interface DropTable {
     sections: Section[];
 }
 
+export interface CollapsedSource {
+    groupName: string;
+    stageName: string;
+    rarity: string;
+    rotations: { rotationName: string; chance: number }[];
+}
+
