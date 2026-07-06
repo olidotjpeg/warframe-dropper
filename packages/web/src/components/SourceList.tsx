@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import type { DropSource } from '../utils/search'
+import type { CollapsedSource } from '@warframe-dropper/types'
 
 const TRUNCATE_AT = 5
 
@@ -40,10 +41,35 @@ function groupBySection(sources: DropSource[]): Map<string, DropSource[]> {
   return map
 }
 
+function collapseRotations(sources: DropSource[]): CollapsedSource[] {
+  const map = new Map<string, CollapsedSource>()
+  for (const src of sources) {
+    const key = `${src.groupName}|${src.stageName}|${src.rarity}`
+    let entry = map.get(key)
+    if (!entry) {
+      entry = { groupName: src.groupName, stageName: src.stageName, rarity: src.rarity, rotations: [] }
+      map.set(key, entry)
+    }
+    entry.rotations.push({ rotationName: src.rotationName, chance: src.chance })
+  }
+  for (const entry of map.values()) {
+    entry.rotations.sort((a, b) => a.rotationName.localeCompare(b.rotationName))
+  }
+  return Array.from(map.values())
+}
+
+function maxChance(entry: CollapsedSource) {
+  return Math.max(...entry.rotations.map(r => r.chance))
+}
+
 function SectionBlock({ name, sources }: { name: string; sources: DropSource[] }) {
   const [showAll, setShowAll] = useState(false)
   const relicGroups = useMemo(() => groupRelics(sources), [sources])
-  const sortedFlat = useMemo(() => [...sources].sort((a, b) => b.chance - a.chance), [sources])
+  const collapsedFlat = useMemo(() => collapseRotations(sources), [sources])
+  const sortedFlat = useMemo(
+    () => [...collapsedFlat].sort((a, b) => maxChance(b) - maxChance(a)),
+    [collapsedFlat],
+  )
   const sortedRelics = useMemo(() => {
     if (!relicGroups) return null
     return Array.from(relicGroups.entries()).sort(([, a], [, b]) => {
@@ -99,18 +125,22 @@ function SectionBlock({ name, sources }: { name: string; sources: DropSource[] }
       <summary className="source-section-summary">
         <span className="source-section-chevron" aria-hidden="true" />
         <span className="source-section-name">{name}</span>
-        <span className="source-section-count">{sources.length}</span>
+        <span className="source-section-count">{sortedFlat.length}</span>
       </summary>
       <div className="source-rows">
-        {visible.map((src, i) => (
+        {visible.map((entry, i) => (
           <div key={i} className="source-row">
-            <span className="source-group">{src.groupName}</span>
-            {src.rotationName && <span className="source-pill">Rot {src.rotationName}</span>}
-            {src.stageName && <span className="source-pill">{src.stageName}</span>}
-            <span className={`source-pill source-rarity rarity-${raritySlug(src.rarity)}`}>
-              {src.rarity}
+            <span className="source-group">{entry.groupName}</span>
+            {entry.stageName && <span className="source-pill">{entry.stageName}</span>}
+            {entry.rotations.map(r => (
+              <span key={r.rotationName} className="source-pill">
+                {r.rotationName && `Rot ${r.rotationName} `}
+                {r.chance.toFixed(2)}%
+              </span>
+            ))}
+            <span className={`source-pill source-rarity rarity-${raritySlug(entry.rarity)}`}>
+              {entry.rarity}
             </span>
-            <span className="source-pill source-chance">{src.chance.toFixed(2)}%</span>
           </div>
         ))}
         {!showAll && hiddenCount > 0 && (
