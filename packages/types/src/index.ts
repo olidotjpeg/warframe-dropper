@@ -38,3 +38,53 @@ export interface CollapsedSource {
     rotations: { rotationName: string; rarity: string; chance: number }[];
 }
 
+export type ItemCategory =
+    | 'resource'
+    | 'warframe'
+    | 'weapon'
+    | 'sentinel'
+    | 'archwing'
+    | 'other';
+
+export interface ExportItem {
+    uniqueName: string;
+    name: string;
+    category: ItemCategory;
+}
+
+export interface Ingredient {
+    uniqueName: string;
+    name: string;
+    count: number;
+}
+
+export interface Recipe {
+    resultUniqueName: string;
+    resultName: string;
+    ingredients: Ingredient[];
+    buildTime?: number;
+    buildPrice?: number;
+}
+
+export interface ItemExport {
+    fetchedAt: string;
+    items: ExportItem[];
+    recipes: Record<string, Recipe>;
+}
+
+export interface ShoppingListBuild {
+    id: string;
+    targetUniqueName: string;
+    targetName: string;
+    quantity: number;
+    addedAt: string;
+}
+
+export interface AggregatedResource {
+    name: string;
+    totalCount: number;
+    fromBuilds: { buildId: string; targetName: string; count: number }[];
+}
+
+export * from './matching';
+
