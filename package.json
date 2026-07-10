@@ -7,7 +7,9 @@
     "packages/web"
   ],
   "scripts": {
-    "parse": "tsx packages/parser/src/index.ts",
+    "parse": "npm run parse:drops && npm run parse:items",
+    "parse:drops": "tsx packages/parser/src/index.ts",
+    "parse:items": "tsx packages/parser/src/items/index.ts",
     "dev": "npm run dev --workspace=packages/web"
   },
   "devDependencies": {

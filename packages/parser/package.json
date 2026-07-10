@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@warframe-dropper/types": "*",
-    "cheerio": "^1.0.0"
+    "cheerio": "^1.0.0",
+    "lzma1": "^0.3.0"
   }
 }
