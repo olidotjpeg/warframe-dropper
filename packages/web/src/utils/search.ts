@@ -46,3 +46,7 @@ export function searchDrops(data: DropTable, query: string): SearchResult[] {
     .map(([item, sources]) => ({ item, sources }))
     .sort((a, b) => a.item.localeCompare(b.item))
 }
+
+export function findExactDrop(data: DropTable, item: string): SearchResult | undefined {
+  return searchDrops(data, item).find((r) => r.item === item)
+}

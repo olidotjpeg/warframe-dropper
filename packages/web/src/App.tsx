@@ -12,15 +12,12 @@ import {
   saveAcquired,
   type AcquiredState,
 } from './utils/shoppingList'
+import { load } from './utils/storage'
 
 type Tab = 'search' | 'tracked' | 'shoppingList'
 
 function loadTracked(): string[] {
-  try {
-    return JSON.parse(localStorage.getItem('tracked') ?? '[]')
-  } catch {
-    return []
-  }
+  return load('tracked', [])
 }
 
 export default function App() {

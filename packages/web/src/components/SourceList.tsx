@@ -1,20 +1,9 @@
 import { useState, useMemo } from 'react'
 import type { DropSource } from '../utils/search'
 import type { CollapsedSource } from '@warframe-dropper/types'
+import { REFINEMENTS, type Refinement, parseRelicGroup, raritySlug } from '../utils/relic'
 
 const TRUNCATE_AT = 5
-
-const REFINEMENTS = ['Intact', 'Exceptional', 'Flawless', 'Radiant'] as const
-type Refinement = typeof REFINEMENTS[number]
-
-function raritySlug(rarity: string) {
-  return rarity.toLowerCase().replace(/\s+/g, '-')
-}
-
-function parseRelicGroup(name: string): { base: string; refinement: Refinement } | null {
-  const m = name.match(/^(.+?)\s*\((Intact|Exceptional|Flawless|Radiant)\)$/)
-  return m ? { base: m[1], refinement: m[2] as Refinement } : null
-}
 
 function groupRelics(
   sources: DropSource[],
@@ -128,8 +117,8 @@ function SectionBlock({ name, sources }: { name: string; sources: DropSource[] }
         <span className="source-section-count">{sortedFlat.length}</span>
       </summary>
       <div className="source-rows">
-        {visible.map((entry, i) => (
-          <div key={i} className="source-row">
+        {visible.map((entry) => (
+          <div key={`${entry.groupName}|${entry.stageName}`} className="source-row">
             <span className="source-group">{entry.groupName}</span>
             {entry.stageName && <span className="source-pill">{entry.stageName}</span>}
             {entry.rotations.map(r => (

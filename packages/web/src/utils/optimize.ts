@@ -1,5 +1,6 @@
 import type { DropTable } from '@warframe-dropper/types'
-import { searchDrops } from './search'
+import { findExactDrop } from './search'
+import { parseRelicGroup } from './relic'
 
 export interface RelicCoverage {
   relicBase: string
@@ -7,20 +8,17 @@ export interface RelicCoverage {
   totalChance: number
 }
 
-const RELIC_RE = /^(.+?)\s*\((Intact|Exceptional|Flawless|Radiant)\)$/
-
 export function findRelicOverlaps(data: DropTable, trackedItems: string[]): RelicCoverage[] {
   const relicMap = new Map<string, Map<string, { chance: number; rarity: string }>>()
 
   for (const item of trackedItems) {
-    const results = searchDrops(data, item)
-    const exact = results.find(r => r.item === item)
+    const exact = findExactDrop(data, item)
     if (!exact) continue
 
     for (const source of exact.sources) {
-      const m = source.groupName.match(RELIC_RE)
-      if (!m) continue
-      const base = m[1]
+      const parsed = parseRelicGroup(source.groupName)
+      if (!parsed) continue
+      const base = parsed.base
 
       const itemMap = relicMap.get(base) ?? new Map()
       const existing = itemMap.get(item)

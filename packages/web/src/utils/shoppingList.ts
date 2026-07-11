@@ -5,6 +5,7 @@ import type {
   ShoppingListBuild,
 } from '@warframe-dropper/types'
 import { findBestDropMatch } from '@warframe-dropper/types'
+import { load } from './storage'
 
 export function getBuildableItems(itemExport: ItemExport): ExportItem[] {
   return itemExport.items.filter((i) => itemExport.recipes[i.uniqueName])
@@ -87,14 +88,6 @@ export function aggregateShoppingList(
   }
 
   return [...totals.values()].sort((a, b) => b.totalCount - a.totalCount)
-}
-
-function load<T>(key: string, fallback: T): T {
-  try {
-    return JSON.parse(localStorage.getItem(key) ?? '') ?? fallback
-  } catch {
-    return fallback
-  }
 }
 
 export function loadBuilds(): ShoppingListBuild[] {

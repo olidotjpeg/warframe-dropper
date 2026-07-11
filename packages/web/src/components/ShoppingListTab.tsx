@@ -41,9 +41,9 @@ export function ShoppingListTab({
                 <input
                   type="number"
                   min={1}
+                  className="build-quantity-input"
                   value={build.quantity}
                   onChange={(e) => onSetQuantity(build.id, Math.max(1, Number(e.target.value)))}
-                  style={{ width: '4em' }}
                 />
                 <button onClick={() => onRemoveBuild(build.id)}>Remove</button>
               </div>
@@ -71,7 +71,7 @@ export function ShoppingListTab({
                   checked={done}
                   onChange={() => onToggleAcquired(resource.name, resource.totalCount)}
                 />
-                <strong style={{ marginLeft: '0.5em' }}>{resource.name}</strong>
+                <strong className="resource-label">{resource.name}</strong>
               </label>
               <span className="source-pill">
                 {have} / {resource.totalCount}

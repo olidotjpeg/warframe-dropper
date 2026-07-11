@@ -1,10 +1,7 @@
 import type { DropTable } from '@warframe-dropper/types'
 import { useMemo } from 'react'
 import { findRelicOverlaps } from '../utils/optimize'
-
-function raritySlug(rarity: string) {
-  return rarity.toLowerCase().replace(/\s+/g, '-')
-}
+import { raritySlug } from '../utils/relic'
 
 interface Props {
   data: DropTable
