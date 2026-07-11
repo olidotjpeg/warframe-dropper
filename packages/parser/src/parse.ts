@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import type { DropTable, Section, Group, Rotation, Stage, Drop } from "@warframe-dropper/types";
+import type { DropTable, Section, Group, Rotation, Stage } from "@warframe-dropper/types";
 
 export function parseHtml(html: string): DropTable {
   const $ = cheerio.load(html);

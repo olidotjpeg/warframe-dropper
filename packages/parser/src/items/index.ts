@@ -1,14 +1,30 @@
 import { join } from 'path';
-import { mkdirSync, readFileSync, writeFileSync } from 'fs';
-import type { ItemExport } from '@warframe-dropper/types';
+import { readFileSync } from 'fs';
+import type { DropTable, ItemExport, Recipe } from '@warframe-dropper/types';
 import { findBestDropMatch } from '@warframe-dropper/types';
 import { fetchExport, fetchIndex } from './fetch';
 import { resolveItems, resolveRecipes, type RawExports } from './resolve';
+import { resolveOutDir, writeSnapshot } from '../output';
 
-const OUT_DIR = join(
-    new URL('.', import.meta.url).pathname,
-    '../../../../packages/web/public/data'
-);
+function crossCheckIngredientNames(dropTable: DropTable, recipes: Record<string, Recipe>): void {
+    const dropItemNames = [
+        ...new Set(
+            dropTable.sections.flatMap((s) =>
+                s.groups.flatMap((g) =>
+                    g.rotations.flatMap((r) => r.stages.flatMap((st) => st.drops.map((d) => d.item)))
+                )
+            )
+        ),
+    ];
+
+    const allIngredientNames = [
+        ...new Set(Object.values(recipes).flatMap((r) => r.ingredients.map((i) => i.name))),
+    ];
+    const unmatched = allIngredientNames.filter((name) => !findBestDropMatch(name, dropItemNames));
+    console.log(
+        `${allIngredientNames.length - unmatched.length}/${allIngredientNames.length} ingredient names matched against drop table`
+    );
+}
 
 async function main() {
     console.log('Fetching PublicExport index...');
@@ -42,43 +58,16 @@ async function main() {
         recipes,
     };
 
-    try {
-        const dropTable = JSON.parse(readFileSync(join(OUT_DIR, 'latest.json'), 'utf-8'));
-        const dropItemNames = [
-            ...new Set(
-                dropTable.sections.flatMap((s: any) =>
-                    s.groups.flatMap((g: any) =>
-                        g.rotations.flatMap((r: any) =>
-                            r.stages.flatMap((st: any) => st.drops.map((d: any) => d.item))
-                        )
-                    )
-                )
-            ),
-        ] as string[];
+    const outDir = resolveOutDir();
 
-        const allIngredientNames = [
-            ...new Set(Object.values(recipes).flatMap((r) => r.ingredients.map((i) => i.name))),
-        ];
-        const unmatched = allIngredientNames.filter(
-            (name) => !findBestDropMatch(name, dropItemNames)
-        );
-        console.log(
-            `${allIngredientNames.length - unmatched.length}/${allIngredientNames.length} ingredient names matched against drop table`
-        );
+    try {
+        const dropTable: DropTable = JSON.parse(readFileSync(join(outDir, 'latest.json'), 'utf-8'));
+        crossCheckIngredientNames(dropTable, recipes);
     } catch (err) {
         console.warn('Could not cross-check ingredient names against drop table:', err);
     }
 
-    mkdirSync(OUT_DIR, { recursive: true });
-
-    const latestPath = join(OUT_DIR, 'items-latest.json');
-    writeFileSync(latestPath, JSON.stringify(itemExport, null, 2));
-    console.log(`Wrote ${latestPath}`);
-
-    const date = new Date().toISOString().slice(0, 10);
-    const snapshotPath = join(OUT_DIR, `items-${date}.json`);
-    writeFileSync(snapshotPath, JSON.stringify(itemExport, null, 2));
-    console.log(`Wrote ${snapshotPath}`);
+    writeSnapshot(outDir, 'items-', itemExport);
 
     console.log('Done!');
 }

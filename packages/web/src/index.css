@@ -453,6 +453,10 @@ details[open] > .source-section-summary {
 }
 
 /* ── Tactile form controls (Shopping List tab) ───────────────── */
+.build-quantity-input { width: 4em; }
+
+.resource-label { margin-left: 0.5em; }
+
 input[type='number'] {
   font-family: var(--font-body);
   background: var(--gradient-inset);

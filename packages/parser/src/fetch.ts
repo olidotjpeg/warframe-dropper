@@ -1,5 +1,3 @@
-import type {} from "@warframe-dropper/types";
-
 const URL = 'https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/uploads/cms/hnfvc0o3jnfvc873njb03enrf56.html';
 
 export async function fetchHtml(): Promise<string> {

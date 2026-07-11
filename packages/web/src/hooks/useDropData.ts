@@ -1,24 +1,6 @@
-import { useEffect, useState } from 'react'
 import type { DropTable } from '@warframe-dropper/types'
+import { useJsonFetch } from './useJsonFetch'
 
-interface State {
-  data: DropTable | null
-  loading: boolean
-  error: string | null
-}
-
-export function useDropData(): State {
-  const [state, setState] = useState<State>({ data: null, loading: true, error: null })
-
-  useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/latest.json`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status} — run npm run parse first`)
-        return res.json() as Promise<DropTable>
-      })
-      .then((data) => setState({ data, loading: false, error: null }))
-      .catch((err: Error) => setState({ data: null, loading: false, error: err.message }))
-  }, [])
-
-  return state
+export function useDropData() {
+  return useJsonFetch<DropTable>('data/latest.json', 'npm run parse')
 }

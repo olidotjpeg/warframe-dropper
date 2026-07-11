@@ -1,5 +1,5 @@
 import type { DropTable } from '@warframe-dropper/types'
-import { searchDrops } from '../utils/search'
+import { findExactDrop } from '../utils/search'
 import { RelicOptimizer } from './RelicOptimizer'
 import { SourceList } from './SourceList'
 
@@ -27,8 +27,7 @@ export function TrackedTab({ data, tracked, onUntrack }: Props) {
         </div>
       )}
       {tracked.map((item) => {
-        const results = searchDrops(data, item)
-        const exact = results.find((r) => r.item === item)
+        const exact = findExactDrop(data, item)
 
         return (
           <div key={item} className="result-group">
